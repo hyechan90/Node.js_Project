@@ -1,38 +1,44 @@
 const express = require('express');
 const app = express();
 const io = require('socket.io')(3000);
-const path = require('path');
 const bcrypt = require('bcrypt');
+const bodyParser = require('body-parser');
 
 app.use(express.static('DB'));
 app.use(express.static('public'));
-app.use(express.json);
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 const { Users } = require('./DB/Users');
 
 /* GET home page. */
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname + '/public/index.html'));
+  res.sendFile(__dirname + '/public/index.html');
 });
 
 app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname + '/public/login.html'));
+  res.sendFile(__dirname + '/public/login.html');
 });
 
 app.get('/register', (req, res) => {
-  res.sendFile(path.join(__dirname + '/public/register.html'));
+  res.sendFile(__dirname + '/public/register.html');
 });
 
-app.post('/register', async (req, res) => {
+app.post('/register', (req, res) => {
   try {
     const hash = bcrypt.hashSync(req.body.password, 10);
-    const user = {
+    const user = new Users({
       name: req.body.name,
       email: req.body.email,
       password: hash
-    };
-    
-  } catch {}
+    });
+    user.save((err, result) => {
+      if (err) throw err;
+      console.log(result);
+    });
+  } catch (err) {
+    console.error('회원가입 실패', err);
+  }
 });
 
 io.on('connection', socket => {
@@ -52,4 +58,6 @@ io.on('connection', socket => {
   });
 });
 
-app.listen(80);
+app.listen(80, () => {
+  console.log('Listening in port 80');
+});

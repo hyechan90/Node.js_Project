@@ -1,0 +1,7 @@
+POST http://localhost:8080/register
+content-type: application/json
+{
+    "name":"hyechan",
+    "email":"hyechan@naver.com",
+    "password":"1234"
+}
