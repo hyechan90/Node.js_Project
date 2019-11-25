@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 module.exports = () => {
   mongoose.connect('mongodb://localhost/Project', {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true
   });
   const db = mongoose.connection;
 

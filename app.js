@@ -8,14 +8,19 @@ const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 app.use(express.static('DB'));
 app.use(express.static('public'));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 const { Users } = require('./DB/Users');
+let me = null;
 
 /* GET home page. */
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
+  if (me == null) {
+    res.redirect('/login');
+  } else {
+    res.sendFile(__dirname + '/public/index.html');
+  }
 });
 
 app.get('/login', (req, res) => {
@@ -23,19 +28,34 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-  const input = {
+  const user = new Users({
     name: req.body.name,
     password: req.body.password
-  };
-  const user = new Users({ input });
-  user.findOne({ name: input.name }, (err, result) => {
-    if (err) throw err;
-    if (!result) {
-      console.log('아이디가 잘못되었습니다.');
-      alert('아이디가 잘못되었습니다.');
-    } else {
-    }
   });
+  Users.findOne({ name: user.name })
+    .then(result => {
+      if (result == null) {
+        res.redirect('/login');
+      } else {
+        return result;
+      }
+    })
+    .then(result => {
+      return bcrypt.compare(req.body.password, result.password);
+    })
+    .then(samePassword => {
+      if (samePassword) {
+        console.log('로그인 성공!');
+        me = req.body.name;
+        res.redirect('/');
+      } else {
+        console.log('로그인 실패');
+        res.redirect('/login');
+      }
+    })
+    .catch(err => {
+      console.error('로그인 실패', err);
+    });
 });
 
 app.get('/register', (req, res) => {
@@ -45,12 +65,11 @@ app.get('/register', (req, res) => {
 app.post('/register', (req, res) => {
   try {
     const hash = bcrypt.hashSync(req.body.password, 10);
-    const input = {
+    const user = new Users({
       name: req.body.name,
       email: req.body.email,
       password: hash
-    };
-    const user = new Users({ input });
+    });
     user.save((err, result) => {
       if (err) throw err;
       console.log(result);
@@ -63,18 +82,17 @@ app.post('/register', (req, res) => {
 
 io.on('connection', socket => {
   socket.on('new-user', name => {
-    users[socket.id] = name;
-    socket.broadcast.emit('user-connected', name);
+    socket.broadcast.emit('user-connected', me);
   });
   socket.on('send-chat-message', message => {
     socket.broadcast.emit('chat-message', {
       message: message,
-      name: users[socket.id]
+      name: me
     });
   });
   socket.on('disconnect', () => {
-    socket.broadcast.emit('user-disconnected', users[socket.id]);
-    delete users[socket.id];
+    socket.broadcast.emit('user-disconnected', me);
+    me = null;
   });
 });
 
