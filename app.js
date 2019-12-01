@@ -3,9 +3,7 @@ const app = express();
 const io = require('socket.io')(3000);
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
 
-app.use(cookieParser());
 app.use(express.static('DB'));
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -16,7 +14,6 @@ let me = null;
 
 /* GET home page. */
 app.get('/', (req, res) => {
-  console.log('connected');
   if (me == null) {
     res.redirect('/login');
   } else {
@@ -46,6 +43,7 @@ app.post('/login', (req, res) => {
       if (result == null) {
         res.redirect('/login');
       } else {
+        console.log(result);
         return result;
       }
     })
@@ -56,7 +54,6 @@ app.post('/login', (req, res) => {
       if (samePassword) {
         console.log('로그인 성공!');
         me = req.body.name;
-        onlineUsers++;
         res.redirect('/main');
       } else {
         console.log('로그인 실패');
