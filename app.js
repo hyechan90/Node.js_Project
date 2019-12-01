@@ -106,6 +106,6 @@ io.on('connection', socket => {
   });
 });
 
-app.listen(80, () => {
-  console.log('Listening in port 80');
+app.listen(8080, () => {
+  console.log('Listening in port 8080');
 });
