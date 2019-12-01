@@ -2,7 +2,7 @@
 require('dotenv');
 const mongoose = require('mongoose');
 module.exports = () => {
-  mongoose.connect('mongodb://localhost/Project', {
+  mongoose.connect('mongodb://localhost:27017/Project', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true
