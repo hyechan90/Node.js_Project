@@ -4,19 +4,34 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Login</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Oswald&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./login.css" type="text/css" />
+    <!--    반응형-->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!--    반응형-->
+    <title>로그인 화면</title>
   </head>
+
   <body>
-    <h1>Login</h1>
-    <form action="./login" method="POST">
+    <h1><span>Maf.</span><span>io</span></h1>
+    <br />
+    <h3>아이디와 비밀번호를 입력해주세요.</h3>
+    <form action="/login" method="POST">
       <div>
-        <label for="name">name</label>
-        <input type="name" id="name" name="name" required /> <br />
-        <label for="password">password</label>
-        <input type="password" id="password" name="password" required />
+        <label>ID : <input type="text" name="name" id="name"/></label>
       </div>
-      <button type="submit">Login</button>
-      <a href="./register">Register</a>
+      <br />
+      <div>
+        <label
+          >PASSWORD : <input type="password" name="password" id="password"
+        /></label>
+      </div>
+      <br />
+      <a href="/register" class="button" id="register">회원가입</a>
+      <button type="submit" class="button" id="submit">입력</button>
     </form>
   </body>
 </html>

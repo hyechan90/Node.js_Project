@@ -16,10 +16,19 @@ let me = null;
 
 /* GET home page. */
 app.get('/', (req, res) => {
+  console.log('connected');
   if (me == null) {
     res.redirect('/login');
   } else {
-    res.sendFile(__dirname + '/public/index.html');
+    res.redirect('/main');
+  }
+});
+
+app.get('/main', (req, res) => {
+  if (me == null) {
+    res.redirect('/login');
+  } else {
+    res.sendFile(__dirname + '/public/main.html');
   }
 });
 
@@ -47,7 +56,8 @@ app.post('/login', (req, res) => {
       if (samePassword) {
         console.log('로그인 성공!');
         me = req.body.name;
-        res.redirect('/');
+        onlineUsers++;
+        res.redirect('/main');
       } else {
         console.log('로그인 실패');
         res.redirect('/login');
@@ -81,7 +91,7 @@ app.post('/register', (req, res) => {
 });
 
 io.on('connection', socket => {
-  socket.on('new-user', name => {
+  socket.on('new-user', () => {
     socket.broadcast.emit('user-connected', me);
   });
   socket.on('send-chat-message', message => {

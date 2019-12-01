@@ -1,0 +1,50 @@
+h1 {
+  margin: 200px auto -10px;
+
+  text-align: center;
+  font-family: 'Oswald', sans-serif;
+  font-size: 100px;
+  text-shadow: 3px 2px 0 black;
+  letter-spacing: 6px;
+}
+h1 > span:first-of-type {
+  color: gray;
+}
+h1 > span:last-of-type {
+  color: #dd1111;
+}
+h3 {
+  margin: 0 auto 30px;
+  text-align: center;
+}
+form > div {
+  display: block;
+  text-align: center;
+}
+form > div:last-of-type {
+  position: relative;
+  right: 34px;
+}
+
+.button {
+  display: inline-block;
+  position: relative;
+  left: 50%;
+  color: black;
+  background-color: white;
+  border-style: solid;
+  border-width: 1px 1px 1px 1px;
+  text-decoration: none;
+  padding: 4px;
+  border-color: #000000;
+  width: 100px;
+  text-align: center;
+  border-radius: 10px;
+}
+a:link {
+  color: black;
+}
+
+#submit {
+  font-size: 16px;
+}

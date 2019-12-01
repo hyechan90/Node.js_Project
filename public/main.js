@@ -3,7 +3,6 @@ const messageContainer = document.getElementById('message-container');
 const messageForm = document.getElementById('send-container');
 const messageInput = document.getElementById('message-input');
 
-const name = prompt('What is your name?');
 appendMessage('연결하셨습니다.');
 socket.emit('new-user', name);
 
@@ -22,9 +21,13 @@ socket.on('user-disconnected', name => {
 messageForm.addEventListener('submit', e => {
   e.preventDefault();
   const message = messageInput.value;
-  appendMessage(`${getDate()} 당신 : ${message}`);
-  socket.emit('send-chat-message', message);
-  messageInput.value = '';
+  if (message === '') {
+    return;
+  } else {
+    appendMessage(`${getDate()} 당신 : ${message}`);
+    socket.emit('send-chat-message', message);
+    messageInput.value = '';
+  }
 });
 
 function appendMessage(message) {
