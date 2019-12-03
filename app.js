@@ -1,6 +1,9 @@
 const express = require('express');
 const app = express();
-const io = require('socket.io')(3000);
+const http = require('http');
+const server = http.createServer(app);
+server.listen(3000);
+const io = require('socket.io')(server);
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 
