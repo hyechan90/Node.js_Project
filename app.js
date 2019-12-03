@@ -12,7 +12,6 @@ app.use(bodyParser.json());
 const { Users } = require('./DB/Users');
 let me = null;
 
-/* GET home page. */
 app.get('/', (req, res) => {
   if (me == null) {
     res.redirect('/login');
